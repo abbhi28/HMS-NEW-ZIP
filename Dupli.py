@@ -2,9 +2,9 @@ import mysql.connector
 import time
 from datetime import datetime
 from datetime import date
-#import qrcode
-#from PIL import Image
-#import os
+import qrcode
+from PIL import Image
+import os
 from tkinter import *
 from tkinter import messagebox
 
@@ -1552,7 +1552,7 @@ def login(abc=0):
         relief = "flat")
 
     b2.place(
-        x = 1008, y = 612,
+        x =pip  1008, y = 612,
         width = 119,
         height = 22)
 
@@ -1568,8 +1568,4 @@ def login(abc=0):
 window = Tk()
 window.geometry("1440x825")
 window.configure(bg = "#ffffff")
-Bill(0)
 login(0)
-
-
-
