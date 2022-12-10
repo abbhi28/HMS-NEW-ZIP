@@ -1576,5 +1576,4 @@ def login(abc=0):
 window = Tk()
 window.geometry("1440x825")
 window.configure(bg = "#ffffff")
-Rec("REC111")
 login(0)
