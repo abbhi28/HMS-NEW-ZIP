@@ -2,6 +2,7 @@ import mysql.connector
 import time
 from datetime import datetime
 from datetime import date
+from time import strftime
 import qrcode
 from PIL import Image
 import os
@@ -1280,18 +1281,22 @@ def Rec(Rec_ID):
         x = 1036, y = 534,
         width = 100,
         height = 127)
+    
+    date=datetime.now()
+    format_date=f"{date:%a, %b %d %Y}"
+    label=Label(window,bg="white", text=format_date, font=("Calibri", 25))
+    label.place(x= 600.0,y= 240.5)
+    def time():
+        string = strftime('%H:%M:%S %p')
+        lbl.config(text=string)
+        lbl.after(1000, time)
+ 
+    lbl = Label(window, font=('calibri', 45, 'bold'),
+                background='White',
+                foreground='Black')
+    lbl.place(x=560,y=170)            
+    time()
 
-    canvas.create_text(
-        720.5, 217.5,
-        text = "9:40 AM",
-        fill = "#000000",
-        font = ("None", int(60.0)))
-
-    canvas.create_text(
-        720.0, 270.5,
-        text = " 2022-12-12",
-        fill = "#000000",
-        font = ("None", int(26.0)))
 
     window.resizable(False, False)
     window.mainloop()  
@@ -1394,17 +1399,20 @@ def Admin(Adm_ID):
         width = 100,
         height = 150)
 
-    canvas.create_text(
-        720.5, 217.5,
-        text = "9:40 AM",
-        fill = "#000000",
-        font = ("None", int(60.0)))
-
-    canvas.create_text(
-        720.0, 270.5,
-        text = "2022-12-12",
-        fill = "#000000",
-        font = ("None", int(26.0)))
+    date=datetime.now()
+    format_date=f"{date:%a, %b %d %Y}"
+    label=Label(window,bg="white", text=format_date, font=("Calibri", 25))
+    label.place(x= 600.0,y= 240.5)
+    def time():
+        string = strftime('%H:%M:%S %p')
+        lbl.config(text=string)
+        lbl.after(1000, time)
+ 
+    lbl = Label(window, font=('calibri', 45, 'bold'),
+                background='White',
+                foreground='Black')
+    lbl.place(x=560,y=170)            
+    time()
 
     img5 = PhotoImage(file = f"Logout.png")
     b5 = Button(
@@ -1552,7 +1560,7 @@ def login(abc=0):
         relief = "flat")
 
     b2.place(
-        x =pip  1008, y = 612,
+        x =1008, y = 612,
         width = 119,
         height = 22)
 
@@ -1568,4 +1576,5 @@ def login(abc=0):
 window = Tk()
 window.geometry("1440x825")
 window.configure(bg = "#ffffff")
+Rec("REC111")
 login(0)
