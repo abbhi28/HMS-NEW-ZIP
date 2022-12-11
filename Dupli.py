@@ -8,6 +8,7 @@ from PIL import Image
 import os
 from tkinter import *
 from tkcalendar import *
+from tkinter import ttk
 from tkinter import messagebox
 
 
@@ -970,7 +971,32 @@ def Rec(Rec_ID):
     def app():
         appointment()
     def RM():
-            print("*"*60)
+        def Check():
+            print("Room AVailability")
+        def Search():
+            ID = entry0.get()
+            cursor.execute("select Patient_ID from patients where Patient_ID='{}'".format(ID))
+            cursor.fetchall()
+            rows = cursor.rowcount
+            if rows!=1:
+                canvas.create_text(#name
+                    203.0, 302.0,
+                text = "Patient Not Found",
+                fill = "#000000",
+                font = ("None", int(24.0))) 
+            else:
+                cursor.execute("select Patient_Name from patients where Patient_ID='{}'".format(ID))
+                Ans = cursor.fetchall()
+                Ans =Ans[0]
+                Ans =Ans[0]
+                canvas.create_text(#name
+                    185.0, 302.0,
+                text = "Name"+":"+Ans,
+                fill = "#000000",
+                font = ("None", int(24.0))) 
+        def Back():
+            Rec(Rec_ID)
+        def Book():
             ID = int(input("Enter Patient ID: "))
             now_date =datetime.now().strftime('%Y-%m-%d')
             now_date=str(now_date)
@@ -993,21 +1019,21 @@ def Rec(Rec_ID):
                     if rows==0:
                         print("Rooms unavailable At the moment....Try other rooms....")
                         time.sleep(2)
-                            
+                                
                     else:
                         cursor.execute("select Room_Number from rooms where Avail = '{}' and price = '{}'".format("EMPTY","2500"))
                         rooms_avail = cursor.fetchall()
                         rooms_avail = (rooms_avail[0])
                         room_select= rooms_avail[0]
                         a = int(input("Press 1 to confirm room Booking"))
-                        if a ==1:
-                            cursor.execute("update rooms set Usage_ID='{}',Avail='{}',Entry_date='{}' where Room_Number='{}';".format(ID,"FULL",now_date,room_select))
-                            conn.commit()
-                            print("Room Number",room_select,"Has Been Booked Successfully")  
-                            time.sleep(5)             
-                        else:
-                            print("Booking cancelled")
-                            RM()
+                    if a ==1:
+                        cursor.execute("update rooms set Usage_ID='{}',Avail='{}',Entry_date='{}' where Room_Number='{}';".format(ID,"FULL",now_date,room_select))
+                        conn.commit()
+                        print("Room Number",room_select,"Has Been Booked Successfully")  
+                        time.sleep(5)             
+                    else:
+                        print("Booking cancelled")
+                        RM()
                 elif a==2:
                     cursor.execute("select Room_Number from rooms where Avail = '{}' and price = '{}'".format("EMPTY","5000"))
                     cursor.fetchall()
@@ -1016,7 +1042,7 @@ def Rec(Rec_ID):
                     if rows==0:
                         print("Rooms unavailable At the moment....Try other rooms....")
                         time.sleep(2)
-                            
+                                
                     else:
                         cursor.execute("select Room_Number from rooms where Avail = '{}' and price = '{}'".format("EMPTY","5000"))
                         rooms_avail = cursor.fetchall()
@@ -1039,7 +1065,7 @@ def Rec(Rec_ID):
                     if rows==0:
                         print("Rooms unavailable At the moment....Try other rooms....")
                         time.sleep(2)
-                            
+                                
                     else:
                         cursor.execute("select Bed_Number from shared where Usage_ID = '{}'".format("0000"))
                         Bed_avail = cursor.fetchall()
@@ -1053,8 +1079,145 @@ def Rec(Rec_ID):
                             time.sleep(5)            
                         else:
                             print("Booking cancelled")
-                            RM()
-      
+                            RM()    
+        canvas = Canvas(
+            window,
+            bg = "#ffffff",
+            height = 825,
+            width = 1440,
+            bd = 0,
+            highlightthickness = 0,
+            relief = "ridge")
+        canvas.place(x = 0, y = 0)
+
+        background_img = PhotoImage(file = f"BRBG.png")
+        background = canvas.create_image(
+            720.0, 403.5,
+            image=background_img)
+
+        canvas.create_text(
+            398.5, 368.5,
+            text = "AC",
+            fill = "#000000",
+            font = ("None", int(24.0)))
+
+        canvas.create_text(
+            559.0, 368.5,
+            text = "NON A/C",
+            fill = "#000000",
+            font = ("None", int(24.0)))
+        radio = StringVar()
+        radio.set(None)
+        r1 = Radiobutton(window,variable= radio,value ='AC',bg="white")
+        r1.place(
+            x=340,y=355.5
+            )
+        r2 = Radiobutton(window,variable= radio,value ='NONAC',bg="white")
+        r2.place(
+            x=460,y=355.5)
+        vals = ['Single ','Shared']
+        drop = ttk.Combobox(window,values = vals,width=20,font="30")
+        drop.place(
+            x=350,y=420,
+            width = 250,
+            height = 30
+            )
+
+        canvas.create_text(
+            471.0, 755.5,
+            text = "Note: ITUs and ICUs can be booked only by the Doctors ",
+            fill = "#000000",
+            font = ("None", int(24)))
+
+        img0 = PhotoImage(file = f"CHCKRM.png")
+        b0 = Button(
+            image = img0,
+            borderwidth = 0,
+            bg = "white",
+            highlightthickness = 0,
+            command = Check,
+            relief = "flat")
+
+        b0.place(
+            x = 330, y = 494,
+            width = 285,
+            height = 47)
+
+        img1 = PhotoImage(file = f"RMBK.png")
+        b1 = Button(
+            image = img1,
+            borderwidth = 0,
+            bg = "white",
+            highlightthickness = 0,
+            command = Book,
+            relief = "flat")
+
+        b1.place(
+            x =330, y = 656,
+            width = 285,
+            height = 47)
+
+        img2 = PhotoImage(file = f"Home.png")
+        b2 = Button(
+            image = img2,
+            borderwidth = 0,
+            bg = "pink",
+            highlightthickness = 0,
+            command = Back,
+            relief = "flat")
+
+        b2.place(
+            x = 1224, y = 63,
+            width = 89,
+            height = 29)
+
+        img3 = PhotoImage(file = f"Back2.png")
+        b3 = Button(
+            image = img3,
+            borderwidth = 0,
+            bg = "white",
+            highlightthickness = 0,
+            command = Back,
+            relief = "flat")
+
+        b3.place(
+            x = 50, y = 175,
+            width = 40,
+            height = 40)
+
+        entry0_img = PhotoImage(file = f"BRTB.png")
+        entry0_bg = canvas.create_image(
+            718.5, 226.5,
+            image = entry0_img)
+
+        entry0 = Entry(
+            bd = 0,
+            bg = "#ffffff",
+            font="35",
+            highlightthickness = 0)
+
+        entry0.place(
+            x = 556, y = 206,
+            width = 325,
+            height = 40)
+
+        img4 = PhotoImage(file = f"Search2.png")
+        b4 = Button(
+            image = img4,
+            borderwidth = 0,
+            bg = "white",
+            highlightthickness = 0,
+            command = Search,
+            relief = "flat")
+
+        b4.place(
+            x = 907, y = 203,
+            width = 46,
+            height = 46)
+
+        window.resizable(False, False)
+        window.mainloop()   
+
 
 
     def RegPatient():
@@ -1767,4 +1930,5 @@ def login(abc=0):
 window = Tk()
 window.geometry("1440x825")
 window.configure(bg = "#ffffff")
+Rec("REC111")
 login(0)
