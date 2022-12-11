@@ -7,6 +7,7 @@ import qrcode
 from PIL import Image
 import os
 from tkinter import *
+from tkcalendar import *
 from tkinter import messagebox
 
 
@@ -1067,25 +1068,203 @@ def Rec(Rec_ID):
         a = a[-1]
         a = a[0]
         ID_NEW = a+1
-        Name = str(input("Enter Name of Patient:"))
-        Age =  str(input("Enter Age Of Patient:"))        
-        date_components = input('Enter Date of Birth formatted as YYYY-MM-DD: ').split('-')
-        year, month, day = [int(item) for item in date_components]
-        DOB = date(year,month,day)
-        Address = str(input("Enter Address:"))
-        Mobile = int(input("Mobile No.:"))
-        Oth_contact = str(input("Other Contact Name :"))
-        Contact_no = int(input("Other Contact Number:"))
-        cursor.execute("insert into patients(Patient_ID,Patient_Name,Patient_Age,DOB,Address,Mobile,Other_contact_Name,Contact_Number) values('{}','{}','{}','{}','{}','{}','{}','{}')".format(ID_NEW,Name,Age,DOB,Address,Mobile,Oth_contact,Contact_no))
-        conn.commit()
-        cursor.execute("insert into VITALS(Patient_ID,Patient_Name,Patient_Age,DOB) values('{}','{}','{}','{}')".format(ID_NEW,Name,Age,DOB))
-        conn.commit()
-        cursor.execute("insert into Bill(Patient_ID,consulting,test_Chrg,Pharma_Chrg,Food_Chrg,Entry_date,Exit_date,Room_Chrg) values('{}','{}','{}','{}','{}','{}','{}','{}')".format(ID_NEW,"0","0","0","0","0000-00-00","0000-00-00","0"))
-        conn.commit()
-        cursor.execute("insert into Patient_pres(Patient_ID,Patient_Name) values('{}','{}')".format(ID_NEW,Name))
-        conn.commit()
-        print("Patient Admitted.....successfully")
-        time.sleep(5)
+  
+        def Register():
+            cursor.execute("insert into patients(Patient_ID,Patient_Name,Patient_Age,DOB,Address,Mobile,Other_contact_Name,Contact_Number) values('{}','{}','{}','{}','{}','{}','{}','{}')".format(ID_NEW,entry0.get(),entry1.get(),cal.get_date(),str(entry6.get())+str(entry7.get()),entry2.get(),entry4.get(),entry5.get()))
+            conn.commit()
+            cursor.execute("insert into VITALS(Patient_ID,Patient_Name,Patient_Age,DOB) values('{}','{}','{}','{}')".format(ID_NEW,entry0.get(),entry1.get(),cal.get_date()))
+            conn.commit()
+            cursor.execute("insert into Bill(Patient_ID,consulting,test_Chrg,Pharma_Chrg,Food_Chrg,Entry_date,Exit_date,Room_Chrg) values('{}','{}','{}','{}','{}','{}','{}','{}')".format(ID_NEW,"0","0","0","0","0000-00-00","0000-00-00","0"))
+            conn.commit()
+            cursor.execute("insert into Patient_pres(Patient_ID,Patient_Name) values('{}','{}')".format(ID_NEW,entry0.get()))
+            conn.commit()
+            canvas.create_text(
+            719.0, 624.5,
+            text = "Patient Registered\n",
+            fill = "#000000",
+            font = ("None", int(27.512195587158203)))
+
+            canvas.create_text(
+                594.5, 672.5,
+                text = "Patient ID:"+str(ID_NEW),
+                fill = "#000000",
+                font = ("None", int(27.512195587158203)))
+       
+        canvas = Canvas(
+            window,
+            bg = "#ffffff",
+            height = 825,
+            width = 1440,
+            bd = 0,
+            highlightthickness = 0,
+            relief = "ridge")
+        canvas.place(x = 0, y = 0)
+        background_img = PhotoImage(file = f"RegPaBG.png")
+        background = canvas.create_image(
+            720.0, 275.0,
+            image=background_img)
+
+        entry0_img = PhotoImage(file = f"REGTB.png")
+        entry0_bg = canvas.create_image(
+            431.5, 290.5,
+            image = entry0_img)
+
+        entry0 = Entry(#Name
+            bd = 0,
+            font=("30"),
+            bg = "#ffffff",
+            highlightthickness = 0)
+
+        entry0.place(
+            x = 269, y = 274,
+            width = 325,
+            height = 31)
+
+        entry1_img = PhotoImage(file = f"REGTB.png")
+        entry1_bg = canvas.create_image(
+            431.5, 369.5,
+            image = entry1_img)
+
+        entry1 = Entry(#Age
+            bd = 0,
+            font=("30"),
+            bg = "#ffffff",
+            highlightthickness = 0)
+
+        entry1.place(
+            x = 269, y = 353,
+            width = 325,
+            height = 31)
+
+        entry2_img = PhotoImage(file = f"REGTB.png")
+        entry2_bg = canvas.create_image(
+            431.5, 449.5,
+            image = entry2_img)
+
+        entry2 = Entry(#Mobile
+            bd = 0,
+            font=("30"),
+            bg = "#ffffff",
+            highlightthickness = 0)
+
+        entry2.place(
+            x = 269, y = 433,
+            width = 325,
+            height = 31)
+
+        
+
+        cal = Calendar(window,selectmode="day")
+        cal.place(
+            x = 300, y = 510)
+        entry4_img = PhotoImage(file = f"REGTB.png")
+        entry4_bg = canvas.create_image(
+            1152.5, 290.5,
+            image = entry4_img)
+
+        entry4 = Entry(  #Contact
+            bd = 0,
+            font=("30"),
+            bg = "#ffffff",
+            highlightthickness = 0)
+
+        entry4.place(
+            x = 990, y = 274,
+            width = 325,
+            height = 31)
+
+        entry5_img = PhotoImage(file = f"REGTB.png")
+        entry5_bg = canvas.create_image(
+            1152.5, 369.5,
+            image = entry5_img)
+
+        entry5 = Entry( # Contact No
+            bd = 0,
+            font=("30"),
+            bg = "#ffffff",
+            highlightthickness = 0)
+
+        entry5.place(
+            x = 990, y = 353,
+            width = 325,
+            height = 31)
+
+        entry6_img = PhotoImage(file = f"REGTB.png")
+        entry6_bg = canvas.create_image(
+            1153.5, 449.5,
+            image = entry6_img)
+
+        entry6 = Entry(# ADD1
+            bd = 0,
+            font=("30"),
+            bg = "#ffffff",
+            highlightthickness = 0)
+
+        entry6.place(
+            x = 991, y = 433,
+            width = 325,
+            height = 31)
+
+        entry7_img = PhotoImage(file = f"REGTB.png")
+        entry7_bg = canvas.create_image(
+            1152.5, 528.5,
+            image = entry7_img)
+
+        entry7 = Entry(#Add2
+            bd = 0,
+            font=("30"),
+            bg = "#ffffff",
+            highlightthickness = 0)
+
+        entry7.place(
+            x = 990, y = 512,
+            width = 325,
+            height = 31)
+
+        img0 = PhotoImage(file = f"Home.png")
+        b0 = Button(
+            image = img0,
+            bg="pink",
+            borderwidth = 0,
+            highlightthickness = 0,
+            command = Rec,
+            relief = "flat")
+
+        b0.place(
+            x = 1224, y = 63,
+            width = 89,
+            height = 29)
+
+        img1 = PhotoImage(file = f"Back2.png")
+        b1 = Button(
+            image = img1,
+            bg="white",
+            borderwidth = 0,
+            highlightthickness = 0,
+            command = Rec,
+            relief = "flat")
+
+        b1.place(
+            x = 50, y = 175,
+            width = 40,
+            height = 40)
+
+        img2 = PhotoImage(file = f"Register Button.png")
+        b2 = Button(
+            image = img2,
+            borderwidth = 0,
+            highlightthickness = 0,
+            command = Register,
+            relief = "flat")
+
+        b2.place(
+            x = 577, y = 709,
+            width = 285,
+            height = 47)
+
+
+        window.resizable(False, False)
+        window.mainloop()
     def Clinical():
         print("Clinical Management")
     def Emergency():
@@ -1169,6 +1348,7 @@ def Rec(Rec_ID):
     b0 = Button(
         image = img0,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = app,
         relief = "flat")
@@ -1182,6 +1362,7 @@ def Rec(Rec_ID):
     b1 = Button(
         image = img1,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = RM,
         relief = "flat")
@@ -1195,6 +1376,7 @@ def Rec(Rec_ID):
     b2 = Button(
         image = img2,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = RegPatient,
         relief = "flat")
@@ -1208,6 +1390,7 @@ def Rec(Rec_ID):
     b3 = Button(
         image = img3,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = Clinical,
         relief = "flat")
@@ -1221,6 +1404,7 @@ def Rec(Rec_ID):
     b4 = Button(
         image = img4,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = Emergency,
         relief = "flat")
@@ -1234,6 +1418,7 @@ def Rec(Rec_ID):
     b5 = Button(
         image = img5,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = Ambulance,
         relief = "flat")
@@ -1247,6 +1432,7 @@ def Rec(Rec_ID):
     b6 = Button(
         image = img6,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = Inpatient,
         relief = "flat")
@@ -1260,6 +1446,7 @@ def Rec(Rec_ID):
     b7 = Button(
         image = img7,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = discharge,
         relief = "flat")
@@ -1273,6 +1460,7 @@ def Rec(Rec_ID):
     b8 = Button(
         image = img8,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = Logout,
         relief = "flat")
@@ -1576,4 +1764,5 @@ def login(abc=0):
 window = Tk()
 window.geometry("1440x825")
 window.configure(bg = "#ffffff")
+Rec("REC111")
 login(0)
