@@ -201,6 +201,7 @@ def Doctor(Doc_ID):
         b0 = Button(
             image = img0,
             borderwidth = 0,
+            bg="white",
             highlightthickness = 0,
             command = Submit,
             relief = "flat")
@@ -213,6 +214,7 @@ def Doctor(Doc_ID):
         b1 = Button(
             image = img1,
             borderwidth = 0,
+            bg="white",
             highlightthickness = 0,
             command = search,
             relief = "flat")
@@ -225,6 +227,7 @@ def Doctor(Doc_ID):
         b4 = Button(
             image = img4,
             borderwidth = 0,
+            bg="white",
             highlightthickness = 0,
             command = Back,
             relief = "flat")
@@ -237,10 +240,8 @@ def Doctor(Doc_ID):
         window.mainloop()
     def appo():
         now_date =datetime.now().strftime('%Y-%m-%d')
-        print(now_date)
         cursor.execute("select * from appointment where Doctor='{}' and App_date='{}'".format(name,now_date))
         app = cursor.fetchall()    
-        print(app)
         Patient_ID=[]
         Patient_Name=[]
         Slot=[]
@@ -276,6 +277,7 @@ def Doctor(Doc_ID):
         b0 = Button(
             image = img0,
             borderwidth = 0,
+            bg="white",
             highlightthickness = 0,
             command = Back,
             relief = "flat")
@@ -287,34 +289,41 @@ def Doctor(Doc_ID):
         xcomp = 133
         ycomp = 275
         z = 0
-        for i in Patient_ID:
+        if Patient_ID == []:
             canvas.create_text(
-            xcomp, ycomp,
-            text = Patient_ID[z],
+            xcomp+255, ycomp,
+            text = "No Appointments Scheduled",
             fill = "#000000",
             font = ("None", int(18.0)))
-            canvas.create_text(
-            xcomp+100, ycomp,
-            text = Patient_Name[z],
-            fill = "#000000",
-            font = ("None", int(18.0)))
-            canvas.create_text(
-            xcomp+630, ycomp,
-            text = Date[z],
-            fill = "#000000",
-            font = ("None", int(18.0)))
-            canvas.create_text(
-            xcomp+915, ycomp,
-            text = Slot[z],
-            fill = "#000000",
-            font = ("None", int(18.0)))
-            canvas.create_text(
-            xcomp+1125, ycomp,
-            text = "30 Mins",
-            fill = "#000000",
-            font = ("None", int(18.0)))
-            ycomp+=40
-            z+=1
+        else:
+            for i in Patient_ID:
+                canvas.create_text(
+                xcomp, ycomp,
+                text = Patient_ID[z],
+                fill = "#000000",
+                font = ("None", int(18.0)))
+                canvas.create_text(
+                xcomp+100, ycomp,
+                text = Patient_Name[z],
+                fill = "#000000",
+                font = ("None", int(18.0)))
+                canvas.create_text(
+                xcomp+630, ycomp,
+                text = Date[z],
+                fill = "#000000",
+                font = ("None", int(18.0)))
+                canvas.create_text(
+                xcomp+915, ycomp,
+                text = Slot[z],
+                fill = "#000000",
+                font = ("None", int(18.0)))
+                canvas.create_text(
+                xcomp+1125, ycomp,
+                text = "30 Mins",
+                fill = "#000000",
+                font = ("None", int(18.0)))
+                ycomp+=40
+                z+=1
             
 
         window.resizable(False, False)
@@ -338,6 +347,7 @@ def Doctor(Doc_ID):
     b0 = Button(
         image = img0,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = appo,
         relief = "flat")
@@ -351,6 +361,7 @@ def Doctor(Doc_ID):
     b1 = Button(
         image = img1,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = exmpatient,
         relief = "flat")
@@ -364,6 +375,7 @@ def Doctor(Doc_ID):
     b2 = Button(
         image = img2,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = clnnurse,
         relief = "flat")
@@ -377,6 +389,7 @@ def Doctor(Doc_ID):
     b3 = Button(
         image = img3,
         borderwidth = 0,
+        bg="white",
         highlightthickness = 0,
         command = lgot,
         relief = "flat")
@@ -954,20 +967,6 @@ def appointment():
 
 
 def Rec(Rec_ID):
-    print("\n\n\n")
-    print("*"*60)
-    print("Reception Portal")
-    print("*"*60)
-    print("1.Book Appointment")
-    print("2.Book Room")
-    print("3.Register Patient")
-    print("4.Clinical Management")
-    print("5.Emergency")
-    print("6.Ambulance")
-    print("7.In-Patient Management")
-    print("8.Discharge")
-    print("9.LOGOUT")
-    #a =int(input("Select a option :"))
     def app():
         appointment()
     def RM():
@@ -1059,20 +1058,24 @@ def Rec(Rec_ID):
 
 
     def RegPatient():
-        print("\n\n\n")
-        print("*"*60)
-        print("Register Patient")
-        print("*"*60)
         cursor.execute("select Patient_ID from patients")
         a = cursor.fetchall()
         a = a[-1]
         a = a[0]
         ID_NEW = a+1
-  
+        def Back():
+            Rec(Rec_ID)
         def Register():
-            cursor.execute("insert into patients(Patient_ID,Patient_Name,Patient_Age,DOB,Address,Mobile,Other_contact_Name,Contact_Number) values('{}','{}','{}','{}','{}','{}','{}','{}')".format(ID_NEW,entry0.get(),entry1.get(),cal.get_date(),str(entry6.get())+str(entry7.get()),entry2.get(),entry4.get(),entry5.get()))
+            date_var=cal.get_date().split("/")
+            date_var[2]=int(date_var[2])
+            if date_var[2]<=30:
+                date_var[2]+=2000
+            else :
+                date_var[2]+=1900 
+            Date_New = str(date_var[2])+"-"+date_var[0]+"-"+date_var[1] 
+            cursor.execute("insert into patients(Patient_ID,Patient_Name,Patient_Age,DOB,Address,Mobile,Other_contact_Name,Contact_Number) values('{}','{}','{}','{}','{}','{}','{}','{}')".format(ID_NEW,entry0.get(),entry1.get(),Date_New,str(entry6.get())+","+str(entry7.get()),entry2.get(),entry4.get(),entry5.get()))
             conn.commit()
-            cursor.execute("insert into VITALS(Patient_ID,Patient_Name,Patient_Age,DOB) values('{}','{}','{}','{}')".format(ID_NEW,entry0.get(),entry1.get(),cal.get_date()))
+            cursor.execute("insert into VITALS(Patient_ID,Patient_Name,Patient_Age,DOB) values('{}','{}','{}','{}')".format(ID_NEW,entry0.get(),entry1.get(),Date_New))
             conn.commit()
             cursor.execute("insert into Bill(Patient_ID,consulting,test_Chrg,Pharma_Chrg,Food_Chrg,Entry_date,Exit_date,Room_Chrg) values('{}','{}','{}','{}','{}','{}','{}','{}')".format(ID_NEW,"0","0","0","0","0000-00-00","0000-00-00","0"))
             conn.commit()
@@ -1086,7 +1089,7 @@ def Rec(Rec_ID):
 
             canvas.create_text(
                 594.5, 672.5,
-                text = "Patient ID:"+str(ID_NEW),
+                text = "                     Patient ID:"+str(ID_NEW),
                 fill = "#000000",
                 font = ("None", int(27.512195587158203)))
        
@@ -1227,7 +1230,7 @@ def Rec(Rec_ID):
             bg="pink",
             borderwidth = 0,
             highlightthickness = 0,
-            command = Rec,
+            command = Back,
             relief = "flat")
 
         b0.place(
@@ -1241,7 +1244,7 @@ def Rec(Rec_ID):
             bg="white",
             borderwidth = 0,
             highlightthickness = 0,
-            command = Rec,
+            command = Back,
             relief = "flat")
 
         b1.place(
@@ -1764,5 +1767,4 @@ def login(abc=0):
 window = Tk()
 window.geometry("1440x825")
 window.configure(bg = "#ffffff")
-Rec("REC111")
 login(0)
