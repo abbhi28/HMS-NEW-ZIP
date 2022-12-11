@@ -972,7 +972,7 @@ def Rec(Rec_ID):
         appointment()
     def RM():
         def Check():
-            print("Room AVailability")
+            print("Room Availability")
         def Search():
             ID = entry0.get()
             cursor.execute("select Patient_ID from patients where Patient_ID='{}'".format(ID))
@@ -997,15 +997,18 @@ def Rec(Rec_ID):
         def Back():
             Rec(Rec_ID)
         def Book():
-            ID = int(input("Enter Patient ID: "))
+            ID = entry0.get()
             now_date =datetime.now().strftime('%Y-%m-%d')
             now_date=str(now_date)
             cursor.execute("select Patient_ID from patients where Patient_ID='{}'".format(ID))
             cursor.fetchall()
             rows = cursor.rowcount
             if rows!=1:
-                print("Patient Not Found")
-                RM()
+                canvas.create_text(#name
+                    203.0, 302.0,
+                text = "Patient Not Found",
+                fill = "#000000",
+                font = ("None", int(24.0)))
             else:
                 print("1.General NON AC single rooms           Rs.2500")
                 print("2.General AC single rooms               Rs.5000")
