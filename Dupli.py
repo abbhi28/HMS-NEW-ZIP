@@ -979,7 +979,7 @@ def Rec(Rec_ID):
             cursor.fetchall()
             rows = cursor.rowcount
             if rows!=1:
-                canvas.create_text(#name
+                NT=canvas.create_text(#name
                     203.0, 302.0,
                 text = "Patient Not Found",
                 fill = "#000000",
@@ -991,7 +991,7 @@ def Rec(Rec_ID):
                 Ans =Ans[0]
                 canvas.create_text(#name
                     185.0, 302.0,
-                text = "Name"+":"+Ans,
+                text = "Name "+": "+Ans,
                 fill = "#000000",
                 font = ("None", int(24.0))) 
         def Back():
